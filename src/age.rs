@@ -7,6 +7,7 @@ pub fn register() {
     CreateCommand::new("age").description("Displays your or another user's account creation date");
 }
 
+//Returns the age of discord account
 #[poise::command(slash_command, prefix_command)]
 pub async fn age(
     ctx: Context<'_>,
