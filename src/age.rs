@@ -2,6 +2,7 @@ use crate::serenity::CreateCommand;
 use crate::{Context, Error};
 use poise::serenity_prelude as serenity;
 
+//register the command with discord API
 pub fn register() {
     CreateCommand::new("age").description("Displays your or another user's account creation date");
 }
