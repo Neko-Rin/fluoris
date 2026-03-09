@@ -2,11 +2,6 @@ use crate::{Context, Error};
 use poise::serenity_prelude as serenity;
 use serenity::builder::CreateCommand;
 
-//register the command with discord API
-pub fn register() -> CreateCommand {
-    CreateCommand::new("age").description("Displays your or another user's account creation date")
-}
-
 //Returns the age of discord account
 #[poise::command(slash_command // /age,
     )]
