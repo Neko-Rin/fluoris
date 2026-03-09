@@ -1,15 +1,13 @@
 mod age;
-use age::age;
+mod ping;
 use dotenv::dotenv;
 use poise::serenity_prelude::{self as serenity};
-use std::vec;
 
 struct Data {} // User data, which is stored and accessible in all command invocations
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type Context<'a> = poise::Context<'a, Data, Error>;
 
 #[tokio::main]
-
 //Connect to discord and start up bot
 async fn main() {
     dotenv().ok();
@@ -18,7 +16,7 @@ async fn main() {
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![age()],
+            commands: vec![age::age(), ping::ping()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {

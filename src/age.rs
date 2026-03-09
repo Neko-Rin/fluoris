@@ -1,14 +1,15 @@
-use crate::serenity::CreateCommand;
 use crate::{Context, Error};
 use poise::serenity_prelude as serenity;
+use serenity::builder::CreateCommand;
 
 //register the command with discord API
-pub fn register() {
-    CreateCommand::new("age").description("Displays your or another user's account creation date");
+pub fn register() -> CreateCommand {
+    CreateCommand::new("age").description("Displays your or another user's account creation date")
 }
 
 //Returns the age of discord account
-#[poise::command(slash_command, prefix_command)]
+#[poise::command(slash_command // /age,
+    )]
 pub async fn age(
     ctx: Context<'_>,
     #[description = "Selected user"] user: Option<serenity::User>,
