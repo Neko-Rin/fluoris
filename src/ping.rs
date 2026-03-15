@@ -1,7 +1,7 @@
 use crate::{Context, Error};
 
-#[poise::command(slash_command // /ping, 
-)]
+///Check for latency of the bot
+#[poise::command(slash_command)]
 pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
     let latency = ctx.ping().await;
     let response = format!(

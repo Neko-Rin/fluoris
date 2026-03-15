@@ -1,10 +1,8 @@
 use crate::{Context, Error};
 use poise::serenity_prelude as serenity;
-use serenity::builder::CreateCommand;
 
-//Returns the age of discord account
-#[poise::command(slash_command // /age,
-    )]
+///Returns the age of discord account
+#[poise::command(slash_command)]
 pub async fn age(
     ctx: Context<'_>,
     #[description = "Selected user"] user: Option<serenity::User>,

@@ -1,11 +1,6 @@
-mod age;
-mod ping;
 use dotenv::dotenv;
+use fluoris::{Data, age, ping, verify};
 use poise::serenity_prelude::{self as serenity};
-
-struct Data {} // User data, which is stored and accessible in all command invocations
-type Error = Box<dyn std::error::Error + Send + Sync>;
-type Context<'a> = poise::Context<'a, Data, Error>;
 
 #[tokio::main]
 //Connect to discord and start up bot
@@ -16,7 +11,7 @@ async fn main() {
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![age::age(), ping::ping()],
+            commands: vec![age::age(), ping::ping(), verify::verify()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {

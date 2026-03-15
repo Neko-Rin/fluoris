@@ -1,2 +1,0 @@
-mod age;
-mod ping;

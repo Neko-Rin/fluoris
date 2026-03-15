@@ -3,15 +3,6 @@
 version = 4
 
 [[package]]
-name = "Fluoris"
-version = "0.1.0"
-dependencies = [
- "dotenv",
- "poise",
- "tokio",
-]
-
-[[package]]
 name = "adler2"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -368,6 +359,15 @@ checksum = "b375d6465b98090a5f25b1c7703f3859783755aa9a80433b36e0379a3ec2f369"
 dependencies = [
  "crc32fast",
  "miniz_oxide",
+]
+
+[[package]]
+name = "fluoris"
+version = "0.1.0"
+dependencies = [
+ "dotenv",
+ "poise",
+ "tokio",
 ]
 
 [[package]]
