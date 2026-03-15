@@ -3,7 +3,7 @@ Discord bot that manages MC server for CMU 2030 written in rust!!!\
 Current features implemented: \
 /age : returns the date of the user's command\
 /ping: returns the latency of the bot\
-/verify: checks if the user is verified\
+/verify: checks if the user is verified
 
 ![image](./Nom.png)
 Source: Arknights
@@ -26,4 +26,4 @@ Reddit: u/Jolly_Hour_5076
 
 Build: Pre-Alpha\
 Status: Not finished\
-Update: 3/15/25 \
+Update: 3/15/25 
