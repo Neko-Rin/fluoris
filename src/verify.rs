@@ -1,5 +1,5 @@
 use crate::{Context, Error};
-use poise::serenity_prelude as serenity;
+use poise::{CreateReply, serenity_prelude as serenity};
 
 ///Checks if a user is verfied
 #[poise::command(slash_command)]
@@ -14,7 +14,16 @@ pub async fn verify(
     };
     let r = serenity::RoleId::new(1482837780932460788);
     let role = u.has_role(ctx.http(), g, r).await.unwrap_or(false);
-    let response = format!("{} is verified is {}", u.name, role);
-    ctx.say(response).await?;
+    let mut response = format!("You are not verified");
+
+    if role {
+        response = format!("You are verified");
+    }
+    ctx.send(CreateReply {
+        content: Some(response),
+        ephemeral: Some(true),
+        ..Default::default()
+    })
+    .await?;
     Ok(())
 }
