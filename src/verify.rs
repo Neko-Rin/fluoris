@@ -13,6 +13,12 @@ pub async fn verify(
         return Ok(());
     };
 
+    #[derive(serde::Deserialize, Debug)]
+    pub struct McData {
+        id: String,
+        name: String,
+    }
+
     //Put the role you are checking for here, speficially the role id
     let r = serenity::RoleId::new(1482837780932460788);
     let role = u.has_role(ctx.http(), g, r).await.unwrap_or(false);
@@ -20,11 +26,24 @@ pub async fn verify(
 
     // checks if minecraft username is vaild
     let mc_api_format = format!("https://api.mojang.com/users/profiles/minecraft/{}", name);
-    let is_username = reqwest::get(mc_api_format).await?.text().await?;
+    let res = reqwest::get(mc_api_format).await?;
 
+    //checks if user has the role
     if role {
-        response = format!("You are verified");
+        response = format!("You are verified sucessfully");
+        //checks if api returns an error or not
+        if res.status().is_success() {
+            // deserialize the data to get ready to write to sql
+            let max_boba_type = res.json::<McData>().await?;
+            println!("{}", max_boba_type.name);
+            println!("{}", max_boba_type.id);
+        } else {
+            response = format!("Invaild username. Please enter a valid Minecraft username.");
+            println!("Goodbye")
+        }
     }
+
+    //sends the message so that only the user can see
     ctx.send(CreateReply {
         content: Some(response),
         ephemeral: Some(true),
