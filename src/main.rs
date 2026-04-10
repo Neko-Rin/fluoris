@@ -1,6 +1,7 @@
 use dotenv::dotenv;
 use fluoris::{Data, age, ping, verify};
 use poise::serenity_prelude::{self as serenity};
+use sqlx::postgres::PgPoolOptions;
 
 #[tokio::main]
 //Connect to discord and start up bot
@@ -21,6 +22,13 @@ async fn main() {
             })
         })
         .build();
+
+    let sql_url = std::env::var("SQL_CONNECT").expect("missing SQL Connection Url");
+
+    let _pool = PgPoolOptions::new()
+        .max_connections(20)
+        .connect(&sql_url)
+        .await;
 
     let client = serenity::ClientBuilder::new(token, intents)
         .framework(framework)

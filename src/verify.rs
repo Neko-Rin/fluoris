@@ -1,6 +1,12 @@
 use crate::{Context, Error};
 use poise::{CreateReply, serenity_prelude as serenity};
 
+#[derive(serde::Deserialize, Debug)]
+pub struct McData {
+    id: String,
+    name: String,
+}
+
 ///Checks if a user is verfied
 #[poise::command(slash_command)]
 pub async fn verify(
@@ -12,12 +18,6 @@ pub async fn verify(
         let _ = ctx.say("You can't use this in dms").await;
         return Ok(());
     };
-
-    #[derive(serde::Deserialize, Debug)]
-    pub struct McData {
-        id: String,
-        name: String,
-    }
 
     //Put the role you are checking for here, speficially the role id
     let r = serenity::RoleId::new(1482837780932460788);
@@ -37,6 +37,8 @@ pub async fn verify(
             let max_boba_type = res.json::<McData>().await?;
             println!("{}", max_boba_type.name);
             println!("{}", max_boba_type.id);
+
+            
         } else {
             response = format!("Invaild username. Please enter a valid Minecraft username.");
             println!("Goodbye")
