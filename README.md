@@ -20,7 +20,8 @@ How to run the bot:
 6) Go to OAuth 2 and generate a link to invite into your server!!!
 7) Go to https://www.postgresql.org/download/ and download postgresql
 8) Go to Pgadmin4 and create a table with MC as the name and MCID, MCUser, Discord as columns  
-9) Go to /verify and change the role id to what ever role you are checking
+9) Go to the same env file and add the PGsql connection link which follows "postgresql://postgres:{Password here}@{Address}:{Port}/postgres"
+10) Go to /verify and change the role id to what ever role you are checking
 
 Any questions feel to reach out at:\
 Discord: @bocchithedepression\
