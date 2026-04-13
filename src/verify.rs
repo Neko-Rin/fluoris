@@ -1,10 +1,14 @@
 use crate::{Context, Error};
-use poise::{CreateReply, serenity_prelude as serenity};
+use poise::{
+    CreateReply,
+    serenity_prelude::{self as serenity},
+};
+use reqwest::Response;
 
 #[derive(serde::Deserialize, Debug)]
 pub struct McData {
-    id: String,
-    name: String,
+    pub id: String,
+    pub name: String,
 }
 
 ///Checks if a user is verfied
@@ -22,35 +26,17 @@ pub async fn verify(
     //Put the role you are checking for here, speficially the role id
     let r = serenity::RoleId::new(1482837780932460788);
     let role = u.has_role(ctx.http(), g, r).await.unwrap_or(false);
-    let mut response = "You are not verified".to_string();
 
     // checks if minecraft username is vaild
     let mc_api_format = format!("https://api.mojang.com/users/profiles/minecraft/{}", name);
     let res = reqwest::get(mc_api_format).await?;
 
-    //checks if user has the role
-    if role {
-        response = "You are verified sucessfully".to_string();
-        //checks if api returns an error or not
-        if res.status().is_success() {
-            // deserialize the data to get ready to write to sql
-            let max_boba_type = res.json::<McData>().await?;
-            let user = ctx.author().id.to_string();
-
-            //Writes to sqlx data base tells user if the mc user is already in data base
-            if let Err(_max_tax_type) =
-                sqlx::query("INSERT INTO MC (MCID, MCUser, Discord) VALUES ($1,$2,$3)")
-                    .bind(max_boba_type.id)
-                    .bind(max_boba_type.name)
-                    .bind(user)
-                    .execute(&ctx.data().pool)
-                    .await
-            {
-                response = "User already registered".to_string()
-            };
-        } else {
-            response = "Invaild username. Please enter a valid Minecraft username.".to_string();
-        }
+    let mut response = run_verify(role, &res);
+    let user = ctx.author().id.to_string();
+    if response == "You are verified sucessfully".to_string() {
+        let max_boba_type = deserial(res).await?;
+        //Writes to sqlx data base tells user if the mc user is already in data base
+        response = sql_write(max_boba_type, user, ctx).await;
     }
 
     //sends the message so that only the user can see
@@ -61,4 +47,34 @@ pub async fn verify(
     })
     .await?;
     Ok(())
+}
+
+//checks if the user is verified and puts an vaild MC user name
+pub fn run_verify(role: bool, res: &Response) -> String {
+    if !role {
+        return "You are not verified".to_string();
+    } else if !res.status().is_success() {
+        return "Invaild username. Please enter a valid Minecraft username.".to_string();
+    } else {
+        return "You are verified sucessfully".to_string();
+    }
+}
+
+pub async fn deserial(res: Response) -> Result<McData, Error> {
+    let mc = res.json::<McData>().await?;
+    Ok(mc)
+}
+
+pub async fn sql_write(max_boba_type: McData, user: String, ctx: Context<'_>) -> String {
+    if let Err(_max_tax_type) =
+        sqlx::query("INSERT INTO MC (MCID, MCUser, Discord) VALUES ($1,$2,$3)")
+            .bind(max_boba_type.id)
+            .bind(max_boba_type.name)
+            .bind(user)
+            .execute(&ctx.data().pool)
+            .await
+    {
+        return "User already registered".to_string();
+    };
+    return "You are verified sucessfully".to_string();
 }
