@@ -10,6 +10,14 @@ async fn main() {
     let token = std::env::var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN");
     let intents = serenity::GatewayIntents::non_privileged();
 
+    let sql_url = std::env::var("SQL_CONNECT").expect("missing SQL Connection Url");
+
+    let pool = PgPoolOptions::new()
+        .max_connections(20)
+        .connect(&sql_url)
+        .await
+        .expect("fail to connect to sql");
+
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
             commands: vec![age::age(), ping::ping(), verify::verify()],
@@ -18,20 +26,14 @@ async fn main() {
         .setup(|ctx, _ready, framework| {
             Box::pin(async move {
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
-                Ok(Data {})
+                Ok(Data { pool })
             })
         })
         .build();
 
-    let sql_url = std::env::var("SQL_CONNECT").expect("missing SQL Connection Url");
-
-    let _pool = PgPoolOptions::new()
-        .max_connections(20)
-        .connect(&sql_url)
-        .await;
-
     let client = serenity::ClientBuilder::new(token, intents)
         .framework(framework)
         .await;
+
     client.unwrap().start().await.unwrap();
 }

@@ -1,5 +1,6 @@
 use crate::{Context, Error};
 use poise::{CreateReply, serenity_prelude as serenity};
+use sqlx::{PgPool, pool, query};
 
 #[derive(serde::Deserialize, Debug)]
 pub struct McData {
@@ -35,10 +36,18 @@ pub async fn verify(
         if res.status().is_success() {
             // deserialize the data to get ready to write to sql
             let max_boba_type = res.json::<McData>().await?;
-            println!("{}", max_boba_type.name);
-            println!("{}", max_boba_type.id);
+            let user = ctx.author().id.to_string();
 
-            
+            if let Err(_max_tax_type) =
+                sqlx::query("INSERT INTO MC (MCID, MCUser, Discord) VALUES ($1,$2,$3)")
+                    .bind(max_boba_type.id)
+                    .bind(max_boba_type.name)
+                    .bind(user)
+                    .execute(&ctx.data().pool)
+                    .await
+            {
+                response = format!("User already registered")
+            };
         } else {
             response = format!("Invaild username. Please enter a valid Minecraft username.");
             println!("Goodbye")
