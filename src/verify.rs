@@ -53,11 +53,11 @@ pub async fn verify(
 pub fn run_verify(role: bool, res: &Response) -> String {
     if !role {
         return "You are not verified".to_string();
-    } else if !res.status().is_success() {
-        return "Invaild username. Please enter a valid Minecraft username.".to_string();
-    } else {
-        return "You are verified sucessfully".to_string();
     }
+    if !res.status().is_success() {
+        return "Invaild username. Please enter a valid Minecraft username.".to_string();
+    }
+    "You are verified sucessfully".to_string()
 }
 
 pub async fn deserial(res: Response) -> Result<McData, Error> {

@@ -1,6 +1,6 @@
 
 CREATE TABLE IF NOT EXISTS MC (
     MCID    TEXT PRIMARY KEY,
-    MCUser  TEXT NOT NULL,
-    Discord TEXT NOT NULL
+    MCUser  TEXT UNIQUE,
+    Discord TEXT UNIQUE
 );
