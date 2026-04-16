@@ -33,7 +33,7 @@ pub async fn verify(
 
     let mut response = run_verify(role, &res);
     let user = ctx.author().id.to_string();
-    if response == "You are verified sucessfully".to_string() {
+    if response == "You are verified sucessfully" {
         let max_boba_type = deserial(res).await?;
         //Writes to sqlx data base tells user if the mc user is already in data base
         response = sql_write(max_boba_type, user, &ctx.data().pool).await;
