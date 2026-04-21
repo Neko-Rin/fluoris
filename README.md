@@ -31,3 +31,5 @@ Reddit: u/Jolly_Hour_5076
 Build: Alpha\
 Status: W.I.P\
 Update: 4/13/26 
+
+<img width="1232" height="295" alt="image" src="https://github.com/user-attachments/assets/1bd32ddd-ba64-4269-8f5e-3cd9113417d0" />
