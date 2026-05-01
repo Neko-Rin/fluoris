@@ -73,15 +73,34 @@ use sqlx::PgPool;
 pub async fn sql_write(max_boba_type: McData, user: String, pool: &PgPool) -> String {
     if let Err(_max_tax_type) =
         sqlx::query("INSERT INTO MC (MCID, MCUser, Discord) VALUES ($1,$2,$3)")
-            .bind(max_boba_type.id)
-            .bind(max_boba_type.name)
-            .bind(user)
+            .bind(&max_boba_type.id)
+            .bind(&max_boba_type.name)
+            .bind(&user)
             .execute(pool)
             .await
     {
         return "User already registered".to_string();
     };
+
+    if let Err(e) = whitelist_player(&max_boba_type.name).await {
+        eprintln!("Failed to whitelist {}: {}", max_boba_type.name, e);
+        return "Verified but failed to whitelist, contact admin".to_string();
+    }
+
     "You are verified sucessfully".to_string()
+}
+
+async fn whitelist_player(username: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let rcon_host = dotenv::var("RCON_HOST").unwrap_or("fabric-server:25575".to_string());
+    let rcon_password = dotenv::var("RCON_PASSWORD").expect("No RCON_PASSWORD set");
+
+    let mut conn = rcon::Connection::builder()
+        .enable_minecraft_quirks(true)
+        .connect(rcon_host, &rcon_password)
+        .await?;
+
+    conn.cmd(&format!("whitelist add {}", username)).await?;
+    Ok(())
 }
 
 #[cfg(test)]
