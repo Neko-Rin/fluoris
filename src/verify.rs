@@ -24,7 +24,11 @@ pub async fn verify(
     };
 
     //Put the role you are checking for here, speficially the role id
-    let r = serenity::RoleId::new(1482837780932460788);
+    let role_checked: u64 = dotenv::var("ROLE")
+        .expect("No role to be checked")
+        .parse::<u64>()
+        .expect("Not a vaild role id");
+    let r = serenity::RoleId::new(role_checked);
     let role = u.has_role(ctx.http(), g, r).await.unwrap_or(false);
 
     // checks if minecraft username is vaild
