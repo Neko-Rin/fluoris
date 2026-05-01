@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY --from=builder /app/target/release/your-app-name .
+COPY --from=builder /app/target/release/fluoris .
 
 EXPOSE 8080
-CMD ["./your-app-name"]
+CMD ["./fluoris"]
