@@ -11,7 +11,7 @@ pub struct McData {
     pub name: String,
 }
 
-///Checks if a user is verfied
+///Run with you minecraft user name to verify
 #[poise::command(slash_command)]
 pub async fn verify(
     ctx: Context<'_>,
