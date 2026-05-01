@@ -15,7 +15,7 @@ RUN rm src/main.rs
 COPY src ./src
 RUN touch src/main.rs && cargo build --release
 
-FROM debian:bookworm-slim
+FROM debian:bookworm
 
 RUN apt-get update && apt-get install -y \
     ca-certificates \
