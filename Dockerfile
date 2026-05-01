@@ -1,4 +1,4 @@
-FROM rust:latest AS builder
+FROM rust:1.85-slim AS builder
 
 RUN apt-get update && apt-get install -y \
     pkg-config \
@@ -15,7 +15,7 @@ RUN rm src/main.rs
 COPY src ./src
 RUN touch src/main.rs && cargo build --release
 
-FROM debian:bookworm
+FROM rust:1.85-slim
 
 RUN apt-get update && apt-get install -y \
     ca-certificates \
