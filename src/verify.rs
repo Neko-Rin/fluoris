@@ -101,7 +101,7 @@ async fn whitelist_player(username: &str) -> Result<(), Box<dyn std::error::Erro
         .connect(rcon_host, &rcon_password)
         .await?;
 
-    conn.cmd(&format!("whitelist add {}", username)).await?;
+    let response = conn.cmd(&format!("whitelist add {}", username)).await?;
 
     println!("RCON response: {:?}", response);
 
