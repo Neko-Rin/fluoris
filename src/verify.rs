@@ -94,12 +94,17 @@ async fn whitelist_player(username: &str) -> Result<(), Box<dyn std::error::Erro
     let rcon_host = dotenv::var("RCON_HOST").unwrap_or("fabric-server:25575".to_string());
     let rcon_password = dotenv::var("RCON_PASSWORD").expect("No RCON_PASSWORD set");
 
+    println!("Attempting RCON connection to: {}", rcon_host);
+
     let mut conn = rcon::Connection::builder()
         .enable_minecraft_quirks(true)
         .connect(rcon_host, &rcon_password)
         .await?;
 
     conn.cmd(&format!("whitelist add {}", username)).await?;
+
+    println!("RCON response: {:?}", response);
+
     Ok(())
 }
 
